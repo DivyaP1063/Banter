@@ -4,15 +4,11 @@ const app = express();
 const userRoutes = require("./routes/User");
 const chatRoutes= require("./routes/Chats");
 const messageRoutes= require("./routes/Message");
-// const profileRoutes = require("./routes/Profile");
-// const paymentRoutes = require("./routes/Payments");
-// const courseRoutes = require("./routes/Course");
-// const contactUsRoute = require("./routes/Contact");
+
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
-// const cors = require("cors");
-// const {cloudinaryConnect } = require("./config/cloudinary");
-// const fileUpload = require("express-fileupload");
+const cors = require("cors");
+
 const dotenv = require("dotenv");
 const chats = require("./data/data");
 
@@ -31,31 +27,20 @@ app.use(cookieParser());
 // 	})
 // )
 
-// app.use(
-// 	fileUpload({
-// 		useTempFiles:true,
-// 		tempFileDir:"/tmp",
-// 	})
-// )
-//cloudinary connection
-// cloudinaryConnect();
+app.use(
+	fileUpload({
+		useTempFiles:true,
+		tempFileDir:"/tmp",
+	})
+)
+// cloudinary connection
+cloudinaryConnect();
 
 //routes
 app.use("/api/v1/auth/user", userRoutes);
 app.use("/api/v1/auth/chat", chatRoutes);
 app.use("/api/v1/auth/message", messageRoutes);
-// app.use("/api/v1/profile", profileRoutes);
-// app.use("/api/v1/course", courseRoutes);
-// app.use("/api/v1/payment", paymentRoutes);
-// app.use("/api/v1/reach", contactUsRoute);
 
-// app.get("/api/chat",(req,res)=>{
-// 	res.send(chats);
-// })
-// app.get("/api/chat/:id",(req,res)=>{
-// 	const singlechat=chats.find((c)=>c._id===req.params.id);
-// 	return res.send(singlechat);
-// })
 
 //def route
 
@@ -66,7 +51,50 @@ app.get("/", (req, res) => {
 	});
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
 	console.log(`App is running at ${PORT}`)
+})
+
+const io = require('socket.io')(server,{
+	pingTimeout:60000,
+	cors:{
+		origin:"http://localhost:3000"
+	},
+}) 
+
+io.on("connection",(socket)=>{
+	console.log("connected to socket.io");
+
+	socket.on('setup',(userData)=>{
+		socket.join(userData._id);
+		console.log(userData._id);
+		socket.emit("connected"); 
+	})
+
+	socket.on('join chat',(room)=>{
+		socket.join(room);
+		console.log("User Joined Room: "+room);
+		socket.emit("connected"); 
+	})
+
+	socket.on("typing", (room) => socket.in(room).emit("typing"));
+	socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+	socket.on("new message", (newMessageRecieved) => {
+		var chat = newMessageRecieved.chat;
+
+		if (!chat.users) return console.log("chat.users not defined");
+
+		chat.users.forEach((user) => {
+		if (user._id == newMessageRecieved.sender._id) return;
+
+		socket.in(user._id).emit("message recieved", newMessageRecieved);
+		});
+	});
+
+	socket.off("setup", () => {
+		console.log("USER DISCONNECTED");
+		socket.leave(userData._id);
+	});
 })
 

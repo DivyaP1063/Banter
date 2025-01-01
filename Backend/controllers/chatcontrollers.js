@@ -23,7 +23,7 @@ const { userId } = req.body;
 
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
-    select: "name pic email",
+    select: "name email image",
   });
 
   if (isChat.length > 0) {
@@ -63,7 +63,7 @@ exports.fetchChats = async (req, res) => {
     // Populate the sender field in the latestMessage
     const populatedResults = await User.populate(results, {
       path: "latestMessage.sender",
-      select: "name pic email",
+      select: "name email image",
     });
 
     res.status(200).send(populatedResults);
