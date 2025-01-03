@@ -20,12 +20,7 @@ database.connect();
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
-// app.use(
-// 	cors({
-// 		origin:"https://studynotionfrontend-mn8v.onrender.com",
-// 		credentials:true,
-// 	})
-// )
+
 
 app.use(
 	fileUpload({
