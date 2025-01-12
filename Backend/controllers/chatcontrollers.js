@@ -185,7 +185,7 @@ exports.addToGroup = async (req, res) => {
       return res.status(404).json({ message: "Chat Not Found" });
     }
 
-    // Check if the requester is the group admin 
+    // Check if the requester is the group admin (you can implement your own logic for this)
     if (chat.groupAdmin.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Only the admin can add users" });
     }

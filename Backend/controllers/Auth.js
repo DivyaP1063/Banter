@@ -49,7 +49,8 @@ exports.signup = async (req, res) => {
     }
 
     if(image){
-      const imageUrl=uploadImageToCloudinary(image,process.env.FOLDER_NAME,100,100) 
+      const imageUrl=uploadImageToCloudinary(image,process.env.FOLDER_NAME,100,100)
+      console.log(imageUrl); 
     }
 
 
