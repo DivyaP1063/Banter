@@ -39,7 +39,7 @@ const People = () => {
   }, [dispatch])
 
   return (
-    <div className='h-[80%] w-full flex flex-col items-center bg-white rounded-2xl shadow-md shadow-blue-300 overflow-y-scroll px-5 py-2'>
+    <div className='h-[80%] w-full flex flex-col items-center bg-white rounded-2xl shadow-md shadow-blue-300 overflow-y-scroll no-scrollbar px-5 py-2'>
       {chats.length > 0 ? (
         chats.map((chat, index) => {
           return (
