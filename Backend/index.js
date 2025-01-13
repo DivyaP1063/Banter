@@ -8,9 +8,12 @@ const messageRoutes= require("./routes/Message");
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const fileUpload= require("express-fileupload")
 
 const dotenv = require("dotenv");
 const chats = require("./data/data");
+
+const {cloudinaryConnect} = require("./config/cloudinary");
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
@@ -20,6 +23,14 @@ database.connect();
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Vite dev server
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // If sending cookies/auth headers
+  })
+);
 
 
 app.use(

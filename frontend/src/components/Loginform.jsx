@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleAuth } from "../slices/authslice";
-import {} from "react-dom";
+import apiConnector from "../services/apiconnector";
+import { setUser,setToken } from "../slices/userSlice"; 
+import { useNavigate } from "react-router-dom";
 const Loginform = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const [formData, setFormdata] = useState({
     email: "",
@@ -28,7 +32,7 @@ const Loginform = () => {
       }
   
       try {
-            const response = await apiConnector("POST", /api/v1/auth/user/login, {
+            const response = await apiConnector("POST", "http://localhost:4000/api/v1/auth/user/login", {
               email,
               password,
             });
@@ -38,22 +42,27 @@ const Loginform = () => {
         if (!response.data.success) {
           throw new Error(response.data.message)
         }
-  
-        localStorage.setItem("Userinfo",JSON.stringify(response));
-  
+
+      dispatch(setToken(response.data.token))
+      const userImage = response.data?.user?.image;
+      dispatch(setUser({ ...response.data.user, image: userImage }))
+
+      localStorage.setItem("token", JSON.stringify(response.data.token))
+      localStorage.setItem("Userinfo", JSON.stringify(response.data.user))
+      navigate("/chats");
+
+        // Reset
+        setFormdata({
+          email: "",
+          password: "",
+        });
+
+    
       } catch (error) {
         console.log("LOGIN API ERROR............", error)
         
       }
   
-  
-      dispatch(toggleAuth());
-  
-      // Reset
-      setFormdata({
-        email: "",
-        password: "",
-      });
     }
 
   return (
@@ -62,7 +71,7 @@ const Loginform = () => {
         <p>Login</p>
       </div>
 
-      <form className="flex flex-col gap-2">
+      <form onSubmit={handleOnSubmit} className="flex flex-col gap-2">
         <input
           type="email"
           name="email"

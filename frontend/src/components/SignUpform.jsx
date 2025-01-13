@@ -10,11 +10,11 @@ const SignUpform = () => {
     name: "",
     email: "",
     password: "",
-    confirmpassword: "",
+    confirmPassword: "",
     image: null,
   });
 
-  const { name, email, password, confirmpassword } = formData;
+  const { name, email, password, confirmPassword,image } = formData;
 
   // Update form data for text inputs
   function handlechange(e) {
@@ -34,17 +34,17 @@ const SignUpform = () => {
 
   async function handleOnSubmit(e){
     e.preventDefault();
-    if (password !== confirmpassword) {
+    if (password !== confirmPassword) {
       console.log("Passwords Do Not Match");
       return;
     }
 
     try {
-          const response = await apiConnector("POST", /api/v1/auth/user/signup, {
+          const response = await apiConnector("POST", "http://localhost:4000/api/v1/auth/user/signup", {
             name,
             email,
             password,
-            confirmpassword,
+            confirmPassword,
             image,
           });
 
@@ -120,8 +120,8 @@ const SignUpform = () => {
         />
         <input
           type="password"
-          name="confirmpassword"
-          value={confirmpassword}
+          name="confirmPassword"
+          value={confirmPassword}
           placeholder="Confirm Password"
           onChange={handlechange}
         />

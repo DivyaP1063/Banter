@@ -1,5 +1,6 @@
 import {  Routes, Route } from "react-router-dom";
 import Template from "./components/Template";
+import Chats from "./pages/Chats"
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Template />} />
+          <Route path="/chats" element={<Chats />} />
         </Routes>
 
     </div>
