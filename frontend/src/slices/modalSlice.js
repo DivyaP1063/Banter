@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  show: false, 
+  show: false,
+  modalType: null,
 };
 
 export const modalSlice = createSlice({
@@ -11,8 +12,11 @@ export const modalSlice = createSlice({
     toggleModal: (state) => {
       state.show = !state.show; // Toggle between Login and Signup
     },
+    setModalType: (state, action) => {
+      state.modalType = action.payload; // Set modal type
+    },
   },
 });
 
-export const { toggleModal } = modalSlice.actions;
+export const { toggleModal,setModalType } = modalSlice.actions;
 export default modalSlice.reducer;

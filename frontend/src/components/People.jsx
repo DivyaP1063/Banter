@@ -10,6 +10,7 @@ const People = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   console.log("Redux value", chats);
+  console.log("Redux value selected", selectedChat);
 
   const fetchChat = async () => {
     try {
@@ -43,7 +44,8 @@ const People = () => {
       {chats.length > 0 ? (
         chats.map((chat, index) => {
           return (
-            <div key={index} className='w-full h-[40px]'>
+            <div key={index} className={`w-full h-[40px] rounded border-2 cursor-pointer border-slate-500 p-2 ${selectedChat==chat?"bg-green-500":""}`} 
+            onClick={(e)=>dispatch(setSelectedChat(chat))}>
               {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
               {index!==chats.length-1 && <div className='h-[1px] w-full bg-slate-400'></div>}
             </div>
