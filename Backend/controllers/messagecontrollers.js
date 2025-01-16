@@ -21,9 +21,9 @@ exports.sendMessages = async (req, res) => {
     let message = await Message.create(newMessage);
 
     // Populate the sender details
-    message = await message.populate("sender", "name pic").execPopulate();
+    message = await message.populate("sender", "name pic");
     // Populate chat details
-    message = await message.populate("chat").execPopulate();
+    message = await message.populate("chat");
     // Populate user details for the chat users
     message = await User.populate(message, {
       path: "chat.users",
