@@ -74,7 +74,7 @@ const Slidingdrawer = () => {
 
 
   return (
-    <div className="w-[350px] h-screen flex flex-col px-4 py-2 gap-y-2 items-center bg-blue-400">
+    <div className="w-[300px] h-screen flex flex-col px-4 py-2 gap-y-3 items-center bg-blue-400">
       <div className="w-full flex justify-end" onClick={() => dispatch(setSlide())}>
         <IoCloseSharp fontSize="40px" color="white" />
       </div>
@@ -92,10 +92,10 @@ const Slidingdrawer = () => {
         </div>
       </div>
 
-        <div>
+        <div className="w-full flex flex-col items-start gap-1">
         {searchResult.length > 0 ? (
           searchResult.map((user, index) => (
-            <div key={index} onClick={() => handleaccesschat(user._id)}>
+            <div key={index} onClick={() => handleaccesschat(user._id)} className="bg-white rounded-md p-2 w-[70%] cursor-pointer hover:bg-green-400 hover:text-white">
               {user.name}
             </div>
           ))

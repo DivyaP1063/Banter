@@ -26,7 +26,7 @@ const People = ({ fetchchatsagain }) => {
         headers, // Pass headers correctly
         null // Use query params
       );
-      console.log("ISSE BHI CHECK KAR HAI", data.data);
+      console.log("ISSE BHI CHECK KAR HAI YAHI WALA", data.data);
 
       dispatch(setChats(data.data));
     } catch (error) {
@@ -46,20 +46,68 @@ const People = ({ fetchchatsagain }) => {
           return (
             <div
               key={index}
-              className={`w-full h-[40px] rounded border-2 cursor-pointer border-slate-500 p-2 ${
-                selectedChat == chat ? "bg-green-500" : ""
+              className={`w-full flex items-center h-[70px] hover:bg-violet-700 hover:rounded-md hover:text-white  border-b-2 cursor-pointer transition-colors  duration-100 ease-in-out  p-2 ${
+                selectedChat == chat ? " bg-gray-300 text-white rounded-md" : ""
               }`}
               onClick={(e) => dispatch(setSelectedChat(chat))}
             >
-              {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
-              {index !== chats.length - 1 && (
-                <div className="h-[1px] w-full bg-slate-400"></div>
+              {!chat.isGroupChat ? (
+                chat.users[0]._id === user._id ? (
+                  <div className="flex items-center gap-x-5">
+                    <div className="w-[40px] h-[40px] rounded-full">
+                      <img
+                        src={chat.users[1].image}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="text-lg font-semibold">
+                        {chat.users[1].name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {chat?.latestMessage?.content}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-x-5">
+                    <div className="w-[45px] h-[45px] rounded-full">
+                      <img
+                        src={chat.users[0].image}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col ">
+                      <div className="text-lg font-semibold">
+                        {chat.users[0].name}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {chat?.latestMessage?.content}
+                      </div>
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="flex items-center gap-x-5">
+                  <div className="w-[45px] h-[45px] rounded-full">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=G`}
+                      className="w-full h-full rounded-full"
+                    />
+                  </div>
+                  <div className="flex flex-col ">
+                    <div className="text-lg font-semibold">{chat.chatName}</div>
+                    <div className="text-sm text-gray-600">
+                      {chat?.latestMessage?.content}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           );
         })
       ) : (
-        <div>No Chats Yet</div>
+        <div className='text-xl font-semibold text-gray-600'>No Chats Yet</div>
       )}
     </div>
   );

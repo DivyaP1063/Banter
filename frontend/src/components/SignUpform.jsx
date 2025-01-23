@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleAuth } from "../slices/authslice";
 import { apiConnector } from "../services/apiconnector";
+import { toast } from "react-toastify";
 
 const SignUpform = () => {
   const isLogin = useSelector((state) => state.auth.isLogin);
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
   const [formData, setFormdata] = useState({
     name: "",
     email: "",
@@ -14,7 +16,7 @@ const SignUpform = () => {
     image: null,
   });
 
-  const { name, email, password, confirmPassword,image } = formData;
+  const { name, email, password, confirmPassword, image } = formData;
 
   // Update form data for text inputs
   function handlechange(e) {
@@ -28,51 +30,66 @@ const SignUpform = () => {
   function handleFileChange(e) {
     setFormdata((prev) => ({
       ...prev,
-      image: e.target.files[0], // Save file object
+      image: e.target.files[0], // File object to be uploaded
     }));
   }
 
-  async function handleOnSubmit(e){
+  // Handle form submission
+  async function handleOnSubmit(e) {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      console.log("Passwords Do Not Match");
+      console.log("Passwords do not match");
+      toast.error("Password Incorrect")
       return;
     }
 
     try {
-          const response = await apiConnector("POST", "http://localhost:4000/api/v1/auth/user/signup", {
-            name,
-            email,
-            password,
-            confirmPassword,
-            image,
-          });
+      const toastId = toast.loading("Creating Account");
+      // Prepare FormData
+      const dataToSend = new FormData();
+      dataToSend.append("name", name);
+      dataToSend.append("email", email);
+      dataToSend.append("password", password);
+      dataToSend.append("confirmPassword", confirmPassword);
+      if (image) dataToSend.append("image", image); // Append image file
 
-          console.log("SIGNUP API RESPONSE............", response)
+      // Send request using apiConnector
+      const response = await apiConnector(
+        "POST",
+        "http://localhost:4000/api/v1/auth/user/signup",
+        dataToSend
+      );
 
       if (!response.data.success) {
-        throw new Error(response.data.message)
+        toast.error(response.data.message);
+        throw new Error(response.data.message);
       }
 
-      localStorage.setItem("Userinfo",JSON.stringify(response));
+      // Store user info in localStorage
+      localStorage.setItem("Userinfo", JSON.stringify(response.data));
 
+      // Reset form data
+      setFormdata({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        image: null,
+      });
+
+      // Toggle authentication state
+      toast.update(toastId, {
+        render: "Sign Up Successful!",
+        type: "success",
+        isLoading: false, // Remove the loading indicator
+        autoClose: 3000, // Automatically close after 3 seconds
+      });
+      dispatch(toggleAuth());
     } catch (error) {
-      console.log("SIGNUP API ERROR............", error)
-      
+      toast.error("SignUp Unsuccessful");
+      console.log("SIGNUP API ERROR:", error);
     }
-
-
-    dispatch(toggleAuth());
-
-    // Reset
-    setFormdata({
-      name: "",
-      email: "",
-      password: "",
-      confirmpassword: "",
-      image: null,
-    });
-
   }
 
   return (
@@ -81,69 +98,84 @@ const SignUpform = () => {
         isLogin ? "rounded-l-2xl" : "rounded-r-2xl"
       } `}
     >
-      <div className="font-bold">
-        <p>Create an account</p>
-      </div>
-      <div className="w-full flex justify-center gap-3">
-        <div className="border-[1px] rounded-md border-black hover:border-blue-600">
-          <button className="p-2">SignUp with Google</button>
+      <div className="w-[50%] h-fit flex flex-col gap-y-7">
+        <div className="font-bold text-xl">
+          <p>Create Account</p>
         </div>
 
-        <div className="border-[1px] rounded-md border-black hover:border-blue-600">
-          <button className=" p-2">SignUp with Facebook</button>
-        </div>
-      </div>
+        <form className="flex flex-col gap-y-4" onSubmit={handleOnSubmit}>
+          <input
+            type="text"
+            name="name"
+            value={name}
+            placeholder="Full Name"
+            onChange={handlechange}
+            className="border-b-2 focus:border-blue-500 outline-none hover:border-blue-500 pb-2"
+          />
 
-      <p>OR</p>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            placeholder="Email"
+            onChange={handlechange}
+            className="border-b-2 focus:border-blue-500 outline-none hover:border-blue-500 pb-2"
+          />
+          <input
+            type="password"
+            name="password"
+            value={password}
+            placeholder="Password"
+            onChange={handlechange}
+            className="border-b-2 focus:border-blue-500 outline-none hover:border-blue-500 pb-2"
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            placeholder="Confirm Password"
+            onChange={handlechange}
+            className="border-b-2 focus:border-blue-500 outline-none hover:border-blue-500 pb-2"
+          />
+          <div className="flex  items-center w-full gap-4">
+            <p className="bg-gray-200 rounded-md p-2 text-gray-500">
+              {image ? "Profile Pic Uploaded" : "Upload a Profile Pic"}
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current.click()}
+              className="w-fit  p-2 hover:bg-cyan-300 bg-cyan-400 text-white rounded-md transition-colors duration-200 ease-in-out"
+            >
+              Browse
+            </button>
+          </div>
 
-      <form className="flex flex-col gap-2" onSubmit={handleOnSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={name}
-          placeholder="Full Name"
-          onChange={handlechange}
-        />
-        <input
-          type="email"
-          name="email"
-          value={email}
-          placeholder="Email"
-          onChange={handlechange}
-        />
-        <input
-          type="password"
-          name="password"
-          value={password}
-          placeholder="Password"
-          onChange={handlechange}
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          value={confirmPassword}
-          placeholder="Confirm Password"
-          onChange={handlechange}
-        />
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-500 text-white rounded-md"
+          <button
+            type="submit"
+            className="w-full p-2 transition-colors duration-200 ease-in-out hover:bg-blue-400 bg-blue-500 text-white rounded-md"
+          >
+            Signup
+          </button>
+        </form>
+        <div
+          onClick={() => dispatch(toggleAuth())}
+          className=" cursor-pointer text-center"
         >
-          Signup
-        </button>
-      </form>
-      <div onClick={() => dispatch(toggleAuth())} className=" cursor-pointer">
-        <p>
-          Don't have an account?
-          <span className="text-blue-500">Login here</span>
-        </p>
+          <p>
+            Don't have an account?
+            <span className="text-blue-500 hover:text-blue-300 transition-colors duration-200 ease-in-out">
+              {` Login here`}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

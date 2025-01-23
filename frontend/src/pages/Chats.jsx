@@ -91,7 +91,7 @@ const Chats = () => {
         />
       )}
       <div
-        className={`absolute top-0 left-0 transition-transform duration-500 ease-in-out`}
+        className={`absolute z-50 top-0 left-0 transition-transform duration-500 ease-in-out`}
         style={{
           transform: toSlide ? "translateX(-100%)" : "translateX(0%)", // Toggle Slide
         }}
@@ -105,6 +105,8 @@ const Chats = () => {
         messages={messages}
         setMessages={setMessages}
         fetchMessages={fetchMessages}
+        setFetchChatsAgain={setFetchChatsAgain}
+        fetchchatsagain={fetchchatsagain}
       />
     </div>
   );

@@ -16,15 +16,16 @@ const Search = () => {
 
 
   return (
-    <div className='bg-white rounded-2xl h-[8%] w-full shadow-md shadow-blue-300 flex items-center justify-between p-2'
-    >
-    <p className='text-lg'>Create a Group Chat</p>
-    <div onClick={()=>modalSwitchhandler()}>
-    <IoAdd  fontSize="40px " color='red'/>
+    <div className="bg-white rounded-2xl h-[8%] w-full shadow-md shadow-blue-300 flex items-center justify-between p-3">
+      <p className="text-lg text-gray-600 font-semibold">Create a Group Chat</p>
+      <div
+        onClick={() => modalSwitchhandler()}
+        className="hover:cursor-pointer  hover:scale-110 transition-transform duration-100 ease-in-out"
+      >
+        <IoAdd fontSize="35px " color="purple" />
+      </div>
     </div>
-    
-    </div>
-  )
+  );
 }
 
 export default Search

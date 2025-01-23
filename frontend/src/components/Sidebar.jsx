@@ -5,6 +5,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { setUser,setToken } from "../slices/userSlice"; 
+import { toast } from 'react-toastify';
 const Sidebar = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Sidebar = () => {
     dispatch(setUser(""));
     
     navigate("/");
+    toast.success("Logged Out")
   }
   
   return (
@@ -24,8 +26,8 @@ const Sidebar = () => {
     <div className='flex flex-col items-center gap-y-4'>
       <div className='rounded-full w-[50px] h-[50px]'>
         
-        <img src={user.image?'${user.image}':`https://ui-avatars.com/api/?name=${user.name}`}
-        className='rounded-full w-[50px] h-[50px]'>
+        <img src={user.image && user.image}
+        className='rounded-full object-cover w-[50px] h-[50px]'>
 
         </img>
       </div>

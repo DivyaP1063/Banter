@@ -21,7 +21,7 @@ exports.sendMessages = async (req, res) => {
     let message = await Message.create(newMessage);
 
     // Populate the sender details
-    message = await message.populate("sender", "name pic");
+    message = await message.populate("sender", "name image");
     // Populate chat details
     message = await message.populate("chat");
     // Populate user details for the chat users
@@ -43,7 +43,7 @@ exports.allMessages = async (req, res) => {
   try {
     // Fetch all messages for a specific chat
     const messages = await Message.find({ chat: req.params.chatId })
-      .populate("sender", "name pic email")
+      .populate("sender", "name image email")
       .populate("chat");
 
     // Return the fetched messages

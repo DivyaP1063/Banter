@@ -34,11 +34,13 @@ app.use(
 
 
 app.use(
-	fileUpload({
-		useTempFiles:true,
-		tempFileDir:"/tmp",
-	})
-)
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp", // You might need to change this depending on your system's temp folder
+    limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
+  })
+);
+
 // cloudinary connection
 cloudinaryConnect();
 
