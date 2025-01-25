@@ -11,6 +11,7 @@ import DeleteGroupModal from '../components/DeleteGroupModal'
 import apiConnector from '../services/apiconnector'
 import io from "socket.io-client";
 import { toggleSocket } from "../slices/socketSlice";
+import Reciever from '../components/Reciever';
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
@@ -72,7 +73,7 @@ const Chats = () => {
 
 
   return (
-    <div className="relative w-screen max-w-screen h-screen max-h-screen p-5 flex justify-between bg-blue-100 ">
+    <div className="relative z-0 w-screen max-w-screen h-screen max-h-screen p-5 flex justify-between bg-blue-100 ">
       {show && (
         <Modal
           renderGroup={
@@ -88,6 +89,8 @@ const Chats = () => {
               fetchMessages={fetchMessages}
             />
           }
+
+          Reciever={<Reciever/>}
         />
       )}
       <div

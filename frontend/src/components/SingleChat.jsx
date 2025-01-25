@@ -105,7 +105,7 @@ const SingleChat = ({
                 ? getSender(user, selectedChat.users)
                 : selectedChat.chatName}
             </div>
-            <div onClick={() => modalSwitchhandler()}>
+            <div onClick={() => modalSwitchhandler()} className=' cursor-pointer'>
               <SlOptionsVertical fontSize="20px" />
             </div>
           </div>
@@ -153,7 +153,7 @@ const SingleChat = ({
 
             <div className="flex w-full gap-1 rounded-3xl">
               <div
-                className="border-2 p-2 bg-white rounded-3xl w-full hover:border-blue-500"
+                className="border-2 p-2 bg-white rounded-3xl w-full hover:border-blue-500 transition-colors duration-100 ease-in-out"
                 onKeyDown={(e) => sendMessage(e)}
               >
                 <input
@@ -165,7 +165,7 @@ const SingleChat = ({
                 />
               </div>
               <div
-                className="p-2 cursor-pointer bg-blue-500 text-white rounded-full h-[40px] w-[40px] text-xs flex justify-center items-center"
+                className="p-2 cursor-pointer bg-blue-500 text-white rounded-full h-[40px] w-[40px] text-xs flex justify-center items-center hover:bg-blue-400 transition-all duration-200 ease-in-out hover:scale-105"
                 onClick={() => sendMessage({ target: { innerText: "Send" } })}
               >
                 <IoSend fontSize="20px" color="white" />
