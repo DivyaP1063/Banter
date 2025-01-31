@@ -9,6 +9,11 @@ import apiConnector from '../services/apiconnector';
 import { IoSend } from "react-icons/io5";
 import io from "socket.io-client"
 import { toggleSocket } from '../slices/socketSlice';
+import {
+  addNotification,
+  removeNotification,
+  clearNotifications,
+} from "../slices/notificationSlice";
 
 const ENDPOINT = "http://localhost:4000";
 var socket , selectedChatCompare;
@@ -25,6 +30,11 @@ const SingleChat = ({
   const user = useSelector((state) => state.user.user);
   const token = useSelector((state) => state.user.token);
   const show = useSelector((state) => state.modal.show);
+  const [typing,setTyping] = useState(false);
+  const [isTyping,setIsTyping] = useState(false);
+  const notifications = useSelector(
+      (state) => state.notification.notifications
+    );
 
   const socketConnected = useSelector(
     (state) => state.socket_Connect.socketConnected
@@ -40,6 +50,7 @@ const SingleChat = ({
 
   const sendMessage = async (e) => {
     if ((e.key === "Enter" || e.target.innerText === "Send") && newMessage) {
+      socket.emit('stop typing',selectedChat._id);
       try {
         const headers = {
           Authorization: `Bearer ${token}`, // Ensure token is valid and not expired
@@ -69,12 +80,32 @@ const SingleChat = ({
     setNewMessage(e.target.value);
 
     // typing indicator logic
+
+        if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+
   };
 
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connected", () => dispatch(toggleSocket()));
+    socket.on("typing",()=>setTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
   }, []);
 
   useEffect(() => {
@@ -82,13 +113,18 @@ const SingleChat = ({
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
+  console.log("check notifications", notifications);
+
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        //give notification
+        if(!notifications.includes(newMessageRecieved)){
+         dispatch(addNotification(newMessageRecieved));
+         setFetchChatsAgain(!fetchchatsagain);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
@@ -152,6 +188,8 @@ const SingleChat = ({
             </div>
 
             <div className="flex w-full gap-1 rounded-3xl">
+            {isTyping?<div>Loading...</div>:<div></div>}
+
               <div
                 className="border-2 p-2 bg-white rounded-3xl w-full hover:border-blue-500 transition-colors duration-100 ease-in-out"
                 onKeyDown={(e) => sendMessage(e)}

@@ -53,51 +53,53 @@ const People = ({ fetchchatsagain }) => {
             >
               {!chat.isGroupChat ? (
                 chat.users[0]._id === user._id ? (
-                  <div className="flex items-center gap-x-5">
-                    <div className="w-[40px] h-[40px] rounded-full">
+                  <div className="flex items-center gap-x-5 max-lg:gap-x-3">
+                    <div className="w-[40px] h-[40px] max-lg:w-[35px] max-lg:h-[35px] rounded-full">
                       <img
                         src={chat.users[1].image}
                         className="w-full h-full rounded-full object-cover"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <div className="text-lg font-semibold">
+                      <div className="text-lg max-lg:text-base font-semibold">
                         {chat.users[1].name}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm max-lg:text-xs text-gray-600">
                         {chat?.latestMessage?.content}
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-x-5">
-                    <div className="w-[45px] h-[45px] rounded-full">
+                  <div className="flex items-center gap-x-5 max-lg:gap-x-3">
+                    <div className="w-[40px] h-[40px] max-lg:w-[35px] max-lg:h-[35px] rounded-full">
                       <img
                         src={chat.users[0].image}
                         className="w-full h-full rounded-full object-cover"
                       />
                     </div>
                     <div className="flex flex-col ">
-                      <div className="text-lg font-semibold">
+                      <div className="text-lg max-lg:text-base font-semibold">
                         {chat.users[0].name}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm max-lg:text-xs text-gray-600">
                         {chat?.latestMessage?.content}
                       </div>
                     </div>
                   </div>
                 )
               ) : (
-                <div className="flex items-center gap-x-5">
-                  <div className="w-[45px] h-[45px] rounded-full">
+                <div className="flex items-center gap-x-5 max-lg:gap-x-3">
+                  <div className="w-[40px] h-[40px] max-lg:w-[35px] max-lg:h-[35px] rounded-full">
                     <img
                       src={`https://ui-avatars.com/api/?name=G`}
-                      className="w-full h-full rounded-full"
+                      className="w-full h-full rounded-full object-cover"
                     />
                   </div>
                   <div className="flex flex-col ">
-                    <div className="text-lg font-semibold">{chat.chatName}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-lg max-lg:text-base font-semibold">
+                      {chat.chatName}
+                    </div>
+                    <div className="text-sm max-lg:text-xs text-gray-600">
                       {chat?.latestMessage?.content}
                     </div>
                   </div>

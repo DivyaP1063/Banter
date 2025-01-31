@@ -19,7 +19,7 @@ const Modal = ({renderGroup,renderDeleteGroup,Reciever}) => {
       {/* Modal Content */}
       <div className="z-30 w-[40%] h-fit">
         {!selectedChat.isGroupChat? 
-        (Reciever)
+        (modalType === "GroupChat"?renderGroup:Reciever)
         :
           (modalType === "GroupChat"
             ? renderGroup

@@ -107,7 +107,7 @@ const Loginform = () => {
       <div onClick={() => dispatch(toggleAuth())} className=" cursor-pointer">
         <p>
           Don't have an account?
-          <span className="text-blue-500 hover:text-blue-300 transition-colors duration-200 ease-in-out">{` SignUp here`}</span>
+          <span className="text-blue-500 hover:text-blue-300 transition-colors duration-200 ease-in-out">{` Signup here`}</span>
         </p>
       </div>
     </div>

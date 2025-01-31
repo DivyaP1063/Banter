@@ -5,6 +5,7 @@ import slideReducer from "../slices/slidingSlice"
 import chatReducer from "../slices/chatSlice";
 import modalReducer from "../slices/modalSlice";
 import socketReducer from "../slices/socketSlice";
+import notificationReducer from "../slices/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     chat: chatReducer,
     modal: modalReducer,
     socket_Connect: socketReducer,
+    notification: notificationReducer,
   },
 });
 

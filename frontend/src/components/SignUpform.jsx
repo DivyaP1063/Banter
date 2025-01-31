@@ -62,9 +62,20 @@ const SignUpform = () => {
       );
 
       if (!response.data.success) {
-        toast.error(response.data.message);
-        throw new Error(response.data.message);
+        toast.update(toastId, {
+          render: "Signup Unsuccessful!",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
       }
+
+      toast.update(toastId, {
+        render: "Sign Up Successful!",
+        type: "success",
+        isLoading: false, // Remove the loading indicator
+        autoClose: 3000, // Automatically close after 3 seconds
+      });
 
       // Store user info in localStorage
       localStorage.setItem("Userinfo", JSON.stringify(response.data));
@@ -79,15 +90,11 @@ const SignUpform = () => {
       });
 
       // Toggle authentication state
-      toast.update(toastId, {
-        render: "Sign Up Successful!",
-        type: "success",
-        isLoading: false, // Remove the loading indicator
-        autoClose: 3000, // Automatically close after 3 seconds
-      });
+
       dispatch(toggleAuth());
     } catch (error) {
-      toast.error("SignUp Unsuccessful");
+      toast.dismiss(); // This will close any lingering toast messages
+      toast.error("Signup Unsuccessful");
       console.log("SIGNUP API ERROR:", error);
     }
   }

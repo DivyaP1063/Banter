@@ -63,7 +63,7 @@ const Chats = () => {
         useEffect(() => {
           socket = io(ENDPOINT);
           socket.emit("setup", user);
-          socket.on("connection", () => dispatch(toggleSocket()));
+          socket.on("connected", () => dispatch(toggleSocket()));
         }, []);
 
           useEffect(()=>{
