@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite dev server
+    origin: "https://banter-frontend.onrender.com", // Vite dev server
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // If sending cookies/auth headers
   })
@@ -63,12 +63,12 @@ const server = app.listen(PORT, () => {
 	console.log(`App is running at ${PORT}`)
 })
 
-const io = require('socket.io')(server,{
-	pingTimeout:60000,
-	cors:{
-		origin:"http://localhost:5173"
-	},
-}) 
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "https://banter-frontend.onrender.com",
+  },
+}); 
 
 io.on("connection",(socket)=>{
 	console.log("connected to socket.io");
