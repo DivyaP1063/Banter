@@ -23,8 +23,8 @@ const Slidingdrawer = () => {
     // Use the apiConnector for the API call
     const data = await apiConnector(
       "POST",
-      `http://localhost:4000/api/v1/auth/chat`,
-      {userId}, // No body data for GET request
+      `https://banter-backend-vdd3.onrender.com/api/v1/auth/chat`,
+      { userId }, // No body data for GET request
       headers, // Pass headers correctly
       { search } // Use query params
     );
@@ -52,7 +52,7 @@ const Slidingdrawer = () => {
     // Use the apiConnector for the API call
     const data = await apiConnector(
       "GET",
-      `http://localhost:4000/api/v1/auth/user`,
+      `https://banter-backend-vdd3.onrender.com/api/v1/auth/user`,
       null, // No body data for GET request
       headers, // Pass headers correctly
       { search } // Use query params

@@ -34,10 +34,14 @@ const Loginform = () => {
       }
   
       try {
-            const response = await apiConnector("POST", "http://localhost:4000/api/v1/auth/user/login", {
-              email,
-              password,
-            });
+            const response = await apiConnector(
+              "POST",
+              "https://banter-backend-vdd3.onrender.com/api/v1/auth/user/login",
+              {
+                email,
+                password,
+              }
+            );
   
             console.log("LOGIN API RESPONSE............", response)
   

@@ -15,7 +15,7 @@ import {
   clearNotifications,
 } from "../slices/notificationSlice";
 
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "https://banter-backend-vdd3.onrender.com";
 var socket , selectedChatCompare;
 
 
@@ -59,7 +59,7 @@ const SingleChat = ({
         // Use the apiConnector for the API call
         const data = await apiConnector(
           "POST",
-          `http://localhost:4000/api/v1/auth/message`,
+          `https://banter-backend-vdd3.onrender.com/api/v1/auth/message`,
           { content: newMessage, chatId: selectedChat._id }, // No body data for GET request
           headers, // Pass headers correctly
           null // Use query params

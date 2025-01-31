@@ -21,7 +21,7 @@ const People = ({ fetchchatsagain }) => {
       // Use the apiConnector for the API call
       const data = await apiConnector(
         "GET",
-        `http://localhost:4000/api/v1/auth/chat`,
+        `https://banter-backend-vdd3.onrender.com/api/v1/auth/chat`,
         null, // No body data for GET request
         headers, // Pass headers correctly
         null // Use query params
